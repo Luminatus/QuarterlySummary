@@ -166,7 +166,7 @@ class Kernel
     {
         $loader = new \Twig\Loader\FilesystemLoader('../templates');
         $this->twig = new \Twig\Environment($loader, [
-            // 'cache' => '../var/cache',
+            'cache' => '../var/cache',
         ]);
     }
 }
