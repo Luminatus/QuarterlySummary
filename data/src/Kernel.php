@@ -5,6 +5,7 @@ namespace Lumie\QuarterlySummary;
 use Lumie\QuarterlySummary\Controller\ControllerInterface;
 use Lumie\QuarterlySummary\Request\RequestHandler;
 use Lumie\QuarterlySummary\Routing\Route;
+use Lumie\QuarterlySummary\Service\QuarterlySummaryService;
 use PDO;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Yaml\Yaml;
@@ -26,6 +27,9 @@ class Kernel
     /** @var array $services */
     protected $services;
 
+    /** @var array $services */
+    protected $discounts;
+
     /** @var bool $init */
     protected bool $init = false;
 
@@ -37,6 +41,7 @@ class Kernel
             $this->loadControllers();
             $this->loadHandler();
             $this->loadDbConnection();
+            $this->loadDiscounts();
             $this->loadServices();
 
             $this->init = true;
@@ -71,6 +76,11 @@ class Kernel
         return $this->db;
     }
 
+    public function getService(string $name)
+    {
+        return $this->services[$name] ?? null;
+    }
+
     private function loadEnv()
     {
         $dotenv = new Dotenv();
@@ -98,17 +108,17 @@ class Kernel
 
             $this->routes[$pattern] = new \Lumie\QuarterlySummary\Routing\Route($pattern, $routeConfig['controller'], $routeConfig['parameters'] ?? []);
         }
-
-        dump($this->routes);
     }
 
     private function loadControllers()
     {
         $yaml = Yaml::parse(file_get_contents('../config/controllers.yaml'));
 
-        foreach ($yaml['controllers'] as $key => $controller) {
-            if (in_array(\Lumie\QuarterlySummary\Controller\ControllerInterface::class, class_implements($controller))) {
-                $this->controllers[$key] = new $controller;
+        foreach ($yaml['controllers'] as $key => $controllerClass) {
+            if (in_array(\Lumie\QuarterlySummary\Controller\ControllerInterface::class, class_implements($controllerClass))) {
+                $controller = new $controllerClass;
+                $controller->setKernel($this);
+                $this->controllers[$key] = $controller;
             } else {
                 throw new \Exception("Controller class does not implement ControllerInterface");
             }
@@ -126,5 +136,19 @@ class Kernel
 
     private function loadServices()
     {
+        $this->services['quarterlySummary'] = new QuarterlySummaryService($this->db, $this->discounts);
+    }
+
+    private function loadDiscounts()
+    {
+        $yaml = Yaml::parse(file_get_contents('../config/discounts.yaml'));
+
+        foreach ($yaml['discounts'] as $discountClass) {
+            if (in_array(\Lumie\QuarterlySummary\Discount\DiscountInterface::class, class_implements($discountClass))) {
+                $this->discounts[] = new $discountClass;
+            } else {
+                throw new \Exception("Discount class does not implement DiscountInterface");
+            }
+        }
     }
 }

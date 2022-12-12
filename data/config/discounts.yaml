@@ -1,0 +1,4 @@
+discounts:
+  - Lumie\QuarterlySummary\Discount\PartnerDiscount
+  - Lumie\QuarterlySummary\Discount\SilverDiscount
+  - Lumie\QuarterlySummary\Discount\GoldDiscount
