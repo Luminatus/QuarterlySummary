@@ -42,7 +42,6 @@ class Route
         }
 
         foreach ($patternSegments as $idx => $segment) {
-            dump($segment, $uriSegments[$idx]);
             if ($this->isParameter($segment)) {
                 $segment = trim($segment, '{}');
                 $regex = $this->getParameterRegex($segment);

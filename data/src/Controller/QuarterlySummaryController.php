@@ -22,6 +22,8 @@ class QuarterlySummaryController extends AbstractController
             'year' => $summary->getYear(),
             'quarterlySummaries' => array_map([$this, 'formatQuarterlySummary'], $summary->getQuarterlySummaries())
         ];
+
+        echo $this->kernel->getTwig()->render('quarterlySummary/list.html.twig', $viewData);
     }
 
     protected function formatQuarterlySummary(QuarterlySummary $summary)
@@ -33,7 +35,7 @@ class QuarterlySummaryController extends AbstractController
             'quarter' => $summary->getQuarter(),
             'sent' => $summary->calculateTotalSent(),
             'total' => $total,
-            'discountName' => $summary->getDiscount()->getName() ?? '',
+            'discountName' => $summary->getDiscount() ? $summary->getDiscount()->getName() : '',
             'discountAmount' => $total - $discountedTotal,
             'discountedTotal' => $discountedTotal
         ];

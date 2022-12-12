@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+	</head>
+	<body class="m-3">
+		<div class="mb-5">
+			<h1>{{ year }}
+				évi negyedéves összegzések
+			</h1>
+			<h2 class="text-muted">{{ company }}</h2>
+		</div>
+		<table class="table table-striped table-bordered">
+			<thead class="">
+				<tr>
+					<th scope="col">Cég</th>
+					<th scope="col">Év</th>
+					<th scope="col">Negyedév</th>
+					<th scope="col">Kiküldött levelek</th>
+					<th scope="col">Negyedéves díj (kedvezmény nélkül)</th>
+					<th scope="col">Kedvezmény neve</th>
+					<th scope="col">Kedvezmény összege</th>
+					<th scope="col">Fizetendő</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for sum in quarterlySummaries %}
+					<tr>
+						<td>{{ company }}</td>
+						<td>{{ year }}</td>
+						<td>{{ sum.quarter }}</td>
+						<td>{{ sum.sent }}</td>
+						<td>{{ sum.total }}</td>
+						<td>{{ sum.discountName }}</td>
+						<td>{{ sum.discountAmount }}</td>
+						<td>{{ sum.discountedTotal }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</div>
+	</body>
+</html>

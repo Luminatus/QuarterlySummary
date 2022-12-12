@@ -31,7 +31,6 @@ class QuarterlySummaryService
      */
     public function getYearlySummary(int $companyId, int $year): YearlySummary
     {
-        dump($companyId, $year);
         $statement = $this->db->prepare('
             SELECT c.id, c.name, s.year, s.month, s.sent
             FROM company c

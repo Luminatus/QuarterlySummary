@@ -9,6 +9,7 @@ use Lumie\QuarterlySummary\Service\QuarterlySummaryService;
 use PDO;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Yaml\Yaml;
+use Twig\Environment;
 
 class Kernel
 {
@@ -33,6 +34,9 @@ class Kernel
     /** @var bool $init */
     protected bool $init = false;
 
+    /** @var Environment $twig */
+    protected Environment $twig;
+
     public function init()
     {
         if (!$this->init) {
@@ -43,6 +47,7 @@ class Kernel
             $this->loadDbConnection();
             $this->loadDiscounts();
             $this->loadServices();
+            $this->loadTwig();
 
             $this->init = true;
         }
@@ -79,6 +84,11 @@ class Kernel
     public function getService(string $name)
     {
         return $this->services[$name] ?? null;
+    }
+
+    public function getTwig()
+    {
+        return $this->twig;
     }
 
     private function loadEnv()
@@ -150,5 +160,13 @@ class Kernel
                 throw new \Exception("Discount class does not implement DiscountInterface");
             }
         }
+    }
+
+    private function loadTwig()
+    {
+        $loader = new \Twig\Loader\FilesystemLoader('../templates');
+        $this->twig = new \Twig\Environment($loader, [
+            // 'cache' => '../var/cache',
+        ]);
     }
 }
