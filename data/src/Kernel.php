@@ -6,6 +6,7 @@ use Lumie\QuarterlySummary\Controller\ControllerInterface;
 use Lumie\QuarterlySummary\Request\RequestHandler;
 use Lumie\QuarterlySummary\Routing\Route;
 use PDO;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Yaml\Yaml;
 
 class Kernel
@@ -31,6 +32,7 @@ class Kernel
     public function init()
     {
         if (!$this->init) {
+            $this->loadEnv();
             $this->loadRoutes();
             $this->loadControllers();
             $this->loadHandler();
@@ -67,6 +69,13 @@ class Kernel
     public function getDb(): PDO
     {
         return $this->db;
+    }
+
+    private function loadEnv()
+    {
+        $dotenv = new Dotenv();
+        $dotenv->usePutenv(true);
+        $dotenv->load('../.env');
     }
 
     private function loadHandler()
@@ -108,9 +117,9 @@ class Kernel
 
     private function loadDbConnection()
     {
-        $dsn = sprintf('%s:%s;dbname=%s', env('DB_DRIVER'), env('DB_HOST'), env('DB_DATABASE'));
-        $username = env('DB_USERNAME');
-        $pw = env('DB_PASSWORD');
+        $dsn = sprintf('%s:host=%s;dbname=%s', getenv('DB_DRIVER'), getenv('DB_HOST'), getenv('DB_DATABASE'));
+        $username = getenv('DB_USERNAME');
+        $pw = getenv('DB_PASSWORD');
 
         $this->db = new PDO($dsn, $username, $pw);
     }
