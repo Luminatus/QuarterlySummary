@@ -1,0 +1,39 @@
+{
+    "name": "lumie/quarterly-summary",
+    "description": "Test application for accessing quarterly summary",
+    "type": "project",
+    "require": {
+        "symfony/flex": "^2.1",
+        "symfony/console": "^6.0",
+        "symfony/dependency-injection": "^6.0",
+        "symfony/var-dumper": "^6.0",
+        "symfony/config": "^6.0",
+        "symfony/yaml": "^6.0",
+        "symfony/dotenv": "^6.0",
+        "symfony/contracts": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "symfony/phpunit-bridge": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lumie\\QuarterlySummary\\": "src/",
+            "Lumie\\QuarterlySummaryTest\\": "tests/src"
+        }
+    },
+    "authors": [
+        {
+            "name": "Szappanos Richárd",
+            "email": "r.szappanos94@gmail.com"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "symfony/flex": true
+        }
+    },
+    "scripts": {
+        "auto-scripts": {}
+    }
+}

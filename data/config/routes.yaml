@@ -1,0 +1,6 @@
+routes:
+  /{company_id}/{year}:
+    parameters:
+      company_id: \d+
+      year: \d{4}
+    controller: QuarterlySummary:get
